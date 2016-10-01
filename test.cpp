@@ -48,10 +48,6 @@ int main( )
 	
 
 
-
-
-
-
 	infile.close(); // CLOSE FILE
 
    
