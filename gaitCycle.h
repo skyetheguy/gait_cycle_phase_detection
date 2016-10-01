@@ -1,3 +1,8 @@
+#pragma once
+#include "processSignal.h"
+#include <iostream>
+
+using namespace std;
 
 
 class gaitCycle 
@@ -16,4 +21,4 @@ private:
 	processSignal xGyroSignal;
 	processSignal yGyroSignal;
 	processSignal zGyroSignal;
-}
+};

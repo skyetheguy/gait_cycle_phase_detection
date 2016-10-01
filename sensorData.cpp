@@ -2,78 +2,78 @@
 
 
 
-void setTime(int value)
+void sensorData::setTime(int value)
 {
 	time = value;
 }
 
 
-void setXAccel(int value)
+void sensorData::setXAccel(int value)
 {
 	xAccel = value;
 }
 
 
-void setYAccel(int value)
+void sensorData::setYAccel(int value)
 {
 	yAccel = value;
 }
 
 
-void setZAccel(int value)
+void sensorData::setZAccel(int value)
 {
 	zAccel = value;
 }
 
 
-void setXGyro(int value)
+void sensorData::setXGyro(int value)
 {
 	xGyro = value;
 }
 
 
-void setYGyro(int value)
+void sensorData::setYGyro(int value)
 {
 	yGyro = value;
 }
 
 
-void setZGyro(int value)
+void sensorData::setZGyro(int value)
 {
 	zGyro = value;
 }
 
-int getTime()
+int sensorData::getTime()
 {
 	return time;
 }
 
-int getXAccel()
+int sensorData::getXAccel()
 {
 	return xAccel;
 }
 
-int getYAccel()
+int sensorData::getYAccel()
 {
 	return yAccel;
 }
 
-int getZAccel()
+int sensorData::getZAccel()
 {
 	return zAccel;
 }
 
-int getXGyro()
+int sensorData::getXGyro()
 {
 	return xGyro;
 }
 
-int getYGyro()
+int sensorData::getYGyro()
 {
 	return xGyro;
 }
 
-int getZGyro()
+int sensorData::getZGyro()
 {
 	return xGyro;
 }
