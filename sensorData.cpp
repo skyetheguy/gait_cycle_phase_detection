@@ -70,12 +70,12 @@ int sensorData::getXGyro()
 
 int sensorData::getYGyro()
 {
-	return xGyro;
+	return yGyro;
 }
 
 int sensorData::getZGyro()
 {
-	return xGyro;
+	return zGyro;
 }
 
 
