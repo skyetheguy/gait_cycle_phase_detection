@@ -1,5 +1,6 @@
 #pragma once
 #include "processSignal.h"
+#include "constants.h"
 #include <iostream>
 
 using namespace std;

@@ -6,6 +6,7 @@
 #include "gaitCycle.h"
 #include "sensorData.h"
 #include "processSignal.h"
+#include "constants.h"
 
 #define CSV_LINE_LENGTH 20 
 

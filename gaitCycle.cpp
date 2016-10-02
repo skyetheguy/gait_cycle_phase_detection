@@ -26,11 +26,12 @@ int gaitCycle::processReadings(sensorData currentData)
 	yGyroSignal.updateState(currentData.getTime(), yGyroFilter);
 	zGyroSignal.updateState(currentData.getTime(), zGyroFilter);
 
-
-	// USED TO DETECT HEEL STRIKE AND TOE-OFF/TAKE OFF USING SPIKES IN Z-ACCEL
+	// ***************************
+	// CHECK FOR HEEL STRIKE or TOE-OFF/TAKE OFF USING SPIKES IN Z-ACCEL
+	// ***************************
 	if (zAccelSignal.changedDir())
 	{
-		if (zAccelSignal.getDir() == 1) // IF DIRECTION CHANGED TO DECREASING WE HAVE A MAX POINT
+		if (zAccelSignal.getDir() == DECREASING) // IF DIRECTION CHANGED TO DECREASING WE HAVE A MAX POINT
 		{
 			// HANDLE MAX POINT
 			cout << "MAX POINT @time " << zAccelSignal.getLastTime() << " value " << zAccelSignal.getLastReading() << endl;
@@ -38,8 +39,8 @@ int gaitCycle::processReadings(sensorData currentData)
 			if (isToeOff(zAccelSignal.getLastReading(), currentData.getTime()))
 			{
 				cout << "\n=======================\n" << " ** TOE OFF ** " << "\n=======================\n\n" ;
-				lastState = 2;
-				return 2;
+				lastState = TOE_OFF;
+				return TOE_OFF;
 			}
 		}
 		else // IF DIRECTION CHANGED TO INCREASING WE HAVE A MIN POINT
@@ -51,19 +52,47 @@ int gaitCycle::processReadings(sensorData currentData)
 			if (isHeelStrike(zAccelSignal.getLastReading(), currentData.getTime()))
 			{
 				cout << "\n=======================\n" << " ** HEEL STRIKE ** " << "\n=======================\n\n" ;
-				lastState = 1;
-				return 1;
+				lastState = HEEL_STRIKE;
+				return HEEL_STRIKE;
 			}
 		}
 	}
 
+	// ***************************
+	// CHECK FOR FOOT FLAT
+	// ***************************
+	if (yGyroSignal.changedDir() && yGyroSignal.getDir() == INCREASING && yGyroFilter < 4000 && yGyroFilter > -1000 && lastState == HEEL_STRIKE)
+	{
+		cout << "\n=======================\n" << " ** FOOT FLAT ** " << currentData.getTime() << "\n=======================\n\n" ;
+		lastState = FOOT_FLAT;
+		return FOOT_FLAT;
+	}
 
-	if (xGyroSignal.isFlat() && yGyroSignal.isFlat() && zGyroSignal.isFlat() && lastState != 10)
+	
+
+	// ***************************
+	// CHECK FOR NOT MOVING
+	// ***************************
+	if (xGyroSignal.isFlat() && yGyroSignal.isFlat() && zGyroSignal.isFlat() && lastState != NOT_MOVING)
 	{
 		cout << "\n=======================\n" << " ** NOT MOVING ** " << currentData.getTime() << "\n=======================\n\n" ;
-		lastState = 10;
-		return 10;
+		lastState = NOT_MOVING;
+		return NOT_MOVING;
 	}
+	
+
+
+	
+	// NOT WORKING PROPERLY YET
+	/*else 
+	{
+		if (!zGyroSignal.isFlat() && !xGyroSignal.isFlat() && lastState == 10)
+		{
+			cout << "\n=======================\n" << " ** STARTED MOVING ** " << currentData.getTime() << "\n=======================\n\n" ;
+			lastState = 11;
+			return 11;
+		}
+	}*/
 
 
 	return 0;

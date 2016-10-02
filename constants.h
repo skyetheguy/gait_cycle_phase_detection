@@ -1,0 +1,9 @@
+#pragma once
+
+# define HEEL_STRIKE 1
+# define FOOT_FLAT 3
+# define TOE_OFF 2
+# define NOT_MOVING 10
+
+#define INCREASING 0
+#define DECREASING 1
