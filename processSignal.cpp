@@ -21,7 +21,7 @@ float processSignal::lowPassFilter(int rawData, float beta) // use Beta as 0.2 f
 void processSignal::updateState(int time, float sensorValue)
 {
 
-	if (dataRecord.size() < 4)
+	if (dataRecord.size() < 5)
 	{
 		dataRecord.push_back(sensorValue);
 	}
@@ -83,11 +83,11 @@ bool processSignal::isFlat()
 		return false;
 	}
 
-	for (int i=0 ; i<= 2 ; i++)
+	for (int i=0 ; i<= 3 ; i++)
 	{
-		for (int x= i+1 ; x<=3 ; x++)
+		for (int x= i+1 ; x<=4 ; x++)
 		{
-			if (abs(dataRecord[i] - dataRecord[x]) > 300)
+			if (abs(dataRecord[i] - dataRecord[x]) > 30)
 			{
 				return false;
 			}

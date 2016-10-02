@@ -30,4 +30,5 @@ private:
 
 	int lastHeelStrikeTime;
 	int lastToeOffTime;
+	int lastState;
 };

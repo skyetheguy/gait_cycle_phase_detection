@@ -4,6 +4,8 @@
 #include <complex>
 #include "sensorData.h"
 
+using namespace std;
+
 class processSignal
 {
 
