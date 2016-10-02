@@ -12,6 +12,8 @@ public:
 
 	int processReadings(sensorData currentData);
 
+	
+
 private:
 
 	processSignal xAccelSignal;
