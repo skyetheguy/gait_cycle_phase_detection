@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <deque>
+#include <complex>
 #include "sensorData.h"
 
 class processSignal
@@ -11,7 +13,7 @@ public:
 
 	float lowPassFilter(int rawData, float beta);
 
-	void updateState(sensorData currentData);
+	void updateState(int time, float sensorValue);
 
 	bool changedDir();
 
@@ -20,6 +22,8 @@ public:
 	float getLastReading();
 
 	int getLastTime();
+
+	bool isFlat();
 
 
 
@@ -34,6 +38,8 @@ private:
 
 	int currTime;
 	int lastTime;
+
+	std::deque<float> dataRecord;
 
 
 

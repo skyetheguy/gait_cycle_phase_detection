@@ -18,13 +18,25 @@ float processSignal::lowPassFilter(int rawData, float beta) // use Beta as 0.2 f
 
 
 
-void processSignal::updateState(sensorData currentData)
+void processSignal::updateState(int time, float sensorValue)
 {
+
+	if (dataRecord.size() < 4)
+	{
+		dataRecord.push_back(sensorValue);
+	}
+	else
+	{
+		dataRecord.push_back(sensorValue);
+		dataRecord.pop_front();
+	}
+
+
 	lastDirection = direction;
 	lastTime = currTime;
 
 
-	currTime = currentData.getTime();
+	currTime = time;
 
 	if (lastReading < smoothData)
 	{
@@ -62,6 +74,26 @@ float processSignal::getLastReading()
 int processSignal::getLastTime()
 {
 	return lastTime;
+}
+
+bool processSignal::isFlat()
+{
+	if (dataRecord.size() < 4)
+	{
+		return false;
+	}
+
+	for (int i=0 ; i<= 2 ; i++)
+	{
+		for (int x= i+1 ; x<=3 ; x++)
+		{
+			if (abs(dataRecord[i] - dataRecord[x]) > 300)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 

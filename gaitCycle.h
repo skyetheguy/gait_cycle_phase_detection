@@ -16,6 +16,8 @@ public:
 
 	bool isHeelStrike(float zAccel, int currTime);
 
+	bool isToeOff(float zAccel, int currTime); 
+
 private:
 
 	processSignal xAccelSignal;
@@ -27,4 +29,5 @@ private:
 	processSignal zGyroSignal;
 
 	int lastHeelStrikeTime;
+	int lastToeOffTime;
 };
