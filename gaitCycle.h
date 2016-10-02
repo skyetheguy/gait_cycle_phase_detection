@@ -10,9 +10,11 @@ class gaitCycle
 
 public:
 
+	gaitCycle();
+
 	int processReadings(sensorData currentData);
 
-	
+	bool isHeelStrike(float zAccel, int currTime);
 
 private:
 
@@ -23,4 +25,6 @@ private:
 	processSignal xGyroSignal;
 	processSignal yGyroSignal;
 	processSignal zGyroSignal;
+
+	int lastHeelStrikeTime;
 };

@@ -24,7 +24,7 @@ int main( )
 
 	// OPEN FILE FOR READING
 	ifstream infile;
-	infile.open("walkData1.csv");
+	infile.open("./Data_files/walkData2.csv");
 
 	// USED FOR READING FROM FILE
 	string value; 
@@ -76,41 +76,3 @@ int main( )
 }
 
 
-
-
-
-
-
-
-
-
-// JUEST A REFERENCE FOR NOW
-
-/*
-int RawData;
-float SmoothData;
-float LPF_Beta = 0.2; // 0<ß<1
-
-  ifstream infile;
-  infile.open("z-accel.csv");
-  string value;
-
-  ofstream outfile;
-  outfile.open("z-accel-filter.csv");
-
-  int count = 0;
-  while (infile.good())
-  {
-  		getline(infile, value);
-
-  		RawData = std::stoi(value, NULL, 10);
-   		SmoothData = SmoothData - (LPF_Beta * (SmoothData - RawData));
-
-  		outfile << count << "," << SmoothData << "\n";
-  		count++;
-  }
-
-  infile.close();
-  outfile.close();
-
-  */

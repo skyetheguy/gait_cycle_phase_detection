@@ -1,5 +1,9 @@
 #include "gaitCycle.h"
 
+gaitCycle::gaitCycle():
+lastHeelStrikeTime(0)
+{}
+
 int gaitCycle::processReadings(sensorData currentData)
 {
 	float xAccelFilter = xAccelSignal.lowPassFilter(currentData.getXAccel(), 0.2);
@@ -12,24 +16,31 @@ int gaitCycle::processReadings(sensorData currentData)
 
 	//cout << currentData.getTime() << "," << xAccelFilter << "," << yAccelFilter << "," << zAccelFilter << "," << xGyroFilter << "," << yGyroFilter << "," << zGyroFilter << endl;
 
-	xAccelSignal.updateState();
-	yAccelSignal.updateState();
-	zAccelSignal.updateState();
+	xAccelSignal.updateState(currentData);
+	yAccelSignal.updateState(currentData);
+	zAccelSignal.updateState(currentData);
 
-	xGyroSignal.updateState();
-	yGyroSignal.updateState();
-	zGyroSignal.updateState();
+	xGyroSignal.updateState(currentData);
+	yGyroSignal.updateState(currentData);
+	zGyroSignal.updateState(currentData);
 
 	if (zAccelSignal.changedDir())
 	{
-		if (zAccelSignal.getDir() == 1)
+		if (zAccelSignal.getDir() == 1) // IF DIRECTION CHANGED TO DECREASING WE HAVE A MAX POINT
 		{
-			cout << currentData.getTime() << endl;
 			// HANDLE MAX POINT
+			cout << "MAX POINT @time " << zAccelSignal.getLastTime() << " value " << zAccelSignal.getLastReading() << endl;
 		}
-		else 
+		else // IF DIRECTION CHANGED TO INCREASING WE HAVE A MIN POINT
 		{
 			// HANDLE MIN POINT
+			cout << "MIN POINT @time " << zAccelSignal.getLastTime() << " value " << zAccelSignal.getLastReading() << endl;
+
+			if (isHeelStrike(zAccelSignal.getLastReading(), currentData.getTime()))
+			{
+				cout << "\n=======================\n" << " ** HEEL STRIKE ** " << "\n=======================\n\n" ;
+				return 0;
+			}
 		}
 	}
 
@@ -37,4 +48,15 @@ int gaitCycle::processReadings(sensorData currentData)
 	return 0;
 
 
+}
+
+
+bool gaitCycle::isHeelStrike(float zAccel, int currTime)
+{
+	if (zAccel < 3000 && (currTime - lastHeelStrikeTime) > 150)
+	{
+		lastHeelStrikeTime = currTime;
+		return true;
+	}
+	return false;
 }

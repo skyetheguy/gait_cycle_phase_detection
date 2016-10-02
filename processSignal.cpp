@@ -4,7 +4,8 @@
 processSignal::processSignal():
 direction(0),
 lastDirection(0),
-lastReading(0)
+lastReading(0),
+lastTime(0)
 {}
 
 float processSignal::lowPassFilter(int rawData, float beta) // use Beta as 0.2 for z accel
@@ -17,9 +18,13 @@ float processSignal::lowPassFilter(int rawData, float beta) // use Beta as 0.2 f
 
 
 
-void processSignal::updateState()
+void processSignal::updateState(sensorData currentData)
 {
 	lastDirection = direction;
+	lastTime = currTime;
+
+
+	currTime = currentData.getTime();
 
 	if (lastReading < smoothData)
 	{
@@ -48,6 +53,15 @@ int processSignal::getDir()
 	return direction;
 }
 
+float processSignal::getLastReading()
+{
+	return lastReading;
+}
 
+
+int processSignal::getLastTime()
+{
+	return lastTime;
+}
 
 
