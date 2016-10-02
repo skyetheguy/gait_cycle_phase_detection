@@ -68,7 +68,17 @@ int gaitCycle::processReadings(sensorData currentData)
 		return FOOT_FLAT;
 	}
 
-	
+	// ***************************
+	// CHECK FOR HEEL OFF
+	// ***************************
+	if (yGyroSignal.getDir() == INCREASING && yGyroFilter > 2500 && lastState == FOOT_FLAT)
+	{
+		cout << "\n=======================\n" << " ** HEEL OFF ** " << currentData.getTime() << "\n=======================\n\n" ;
+		lastState = HEEL_OFF;
+		return HEEL_OFF;
+	}
+
+
 
 	// ***************************
 	// CHECK FOR NOT MOVING
