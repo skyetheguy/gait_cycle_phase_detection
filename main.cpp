@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 #include "gaitCycle.h"
 #include "sensorData.h"
@@ -12,10 +14,14 @@
 
 
 using namespace std;
+using namespace std::this_thread; // sleep_for, sleep_until
+using namespace std::chrono; // nanoseconds, system_clock, seconds
+
 
 
 int main( )
 {
+
 	gaitCycle *mainCycle = new gaitCycle;
 
 	int state; // Current state or phase of the gait cycle
@@ -64,9 +70,8 @@ int main( )
 		state = mainCycle->processReadings(currentData);
 
 		lineData.clear();
+		sleep_for(nanoseconds(10000000));
 	}
-
-	cout <<"finished loop" << endl;
 
 
 	infile.close(); // CLOSE FILE
