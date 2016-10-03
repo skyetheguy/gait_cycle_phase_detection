@@ -25,7 +25,7 @@ int main( )
 
 	// OPEN FILE FOR READING
 	ifstream infile;
-	infile.open("./Data_files/walkData2.csv");
+	infile.open("./Data_files/walkData1.csv");
 
 	// USED FOR READING FROM FILE
 	string value; 

@@ -29,7 +29,6 @@ private:
 	processSignal yGyroSignal;
 	processSignal zGyroSignal;
 
-	int lastHeelStrikeTime;
-	int lastToeOffTime;
 	int lastState;
+	int lastStateChangeTime;
 };

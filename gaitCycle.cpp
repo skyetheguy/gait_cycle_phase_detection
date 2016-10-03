@@ -1,8 +1,7 @@
 #include "gaitCycle.h"
 
 gaitCycle::gaitCycle():
-lastHeelStrikeTime(0),
-lastToeOffTime(0),
+lastStateChangeTime(0),
 lastState(0)
 {}
 
@@ -27,6 +26,18 @@ int gaitCycle::processReadings(sensorData currentData)
 	zGyroSignal.updateState(currentData.getTime(), zGyroFilter);
 
 	// ***************************
+	// CHECK FOR MID SWING
+	// ***************************
+	if (lastState == TOE_OFF && (currentData.getTime() - lastStateChangeTime) > 20 )
+	{
+		cout << "\n=======================\n" << " ** MID SWING ** " << currentData.getTime() << "\n=======================\n\n" ;
+		lastState = MID_SWING;
+		lastStateChangeTime = currentData.getTime();
+		return MID_SWING;
+	}
+
+
+	// ***************************
 	// CHECK FOR HEEL STRIKE or TOE-OFF/TAKE OFF USING SPIKES IN Z-ACCEL
 	// ***************************
 	if (zAccelSignal.changedDir())
@@ -38,8 +49,9 @@ int gaitCycle::processReadings(sensorData currentData)
 
 			if (isToeOff(zAccelSignal.getLastReading(), currentData.getTime()))
 			{
-				cout << "\n=======================\n" << " ** TOE OFF ** " << "\n=======================\n\n" ;
+				cout << "\n=======================\n" << " ** TOE OFF ** " << currentData.getTime() << "\n=======================\n\n" ;
 				lastState = TOE_OFF;
+				lastStateChangeTime = currentData.getTime();
 				return TOE_OFF;
 			}
 		}
@@ -51,8 +63,9 @@ int gaitCycle::processReadings(sensorData currentData)
 
 			if (isHeelStrike(zAccelSignal.getLastReading(), currentData.getTime()))
 			{
-				cout << "\n=======================\n" << " ** HEEL STRIKE ** " << "\n=======================\n\n" ;
+				cout << "\n=======================\n" << " ** HEEL STRIKE ** " << currentData.getTime() << "\n=======================\n\n" ;
 				lastState = HEEL_STRIKE;
+				lastStateChangeTime = currentData.getTime();
 				return HEEL_STRIKE;
 			}
 		}
@@ -65,6 +78,7 @@ int gaitCycle::processReadings(sensorData currentData)
 	{
 		cout << "\n=======================\n" << " ** FOOT FLAT ** " << currentData.getTime() << "\n=======================\n\n" ;
 		lastState = FOOT_FLAT;
+		lastStateChangeTime = currentData.getTime();
 		return FOOT_FLAT;
 	}
 
@@ -75,6 +89,7 @@ int gaitCycle::processReadings(sensorData currentData)
 	{
 		cout << "\n=======================\n" << " ** HEEL OFF ** " << currentData.getTime() << "\n=======================\n\n" ;
 		lastState = HEEL_OFF;
+		lastStateChangeTime = currentData.getTime();
 		return HEEL_OFF;
 	}
 
@@ -87,6 +102,7 @@ int gaitCycle::processReadings(sensorData currentData)
 	{
 		cout << "\n=======================\n" << " ** NOT MOVING ** " << currentData.getTime() << "\n=======================\n\n" ;
 		lastState = NOT_MOVING;
+		lastStateChangeTime = currentData.getTime();
 		return NOT_MOVING;
 	}
 	
@@ -113,9 +129,9 @@ int gaitCycle::processReadings(sensorData currentData)
 
 bool gaitCycle::isHeelStrike(float zAccel, int currTime)
 {
-	if (zAccel < 3000 && (currTime - lastHeelStrikeTime) > 150)
+	if (zAccel < 3000 && (currTime - lastStateChangeTime) > 150)
 	{
-		lastHeelStrikeTime = currTime;
+		lastStateChangeTime = currTime;
 		return true;
 	}
 	return false;
@@ -123,9 +139,9 @@ bool gaitCycle::isHeelStrike(float zAccel, int currTime)
 
 bool gaitCycle::isToeOff(float zAccel, int currTime)
 {
-	if (zAccel > 15500 && (currTime - lastToeOffTime) > 150)
+	if (zAccel > 15500 && (currTime - lastStateChangeTime) > 150)
 	{
-		lastToeOffTime = currTime;
+		lastStateChangeTime = currTime;
 		return true;
 	}
 	return false;
